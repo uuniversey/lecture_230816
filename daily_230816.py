@@ -114,36 +114,36 @@
 
 # 18388. 배열 최소 합
 
-import sys
-sys.stdin = open('input_4881.txt', 'r')
-
-def permutation(idx, result):
-    global min_v
-
-    if idx == N:
-        if result < min_v:
-            min_v = result
-        return
-    elif min_v <= result:
-        return
-
-    else:
-        for swap_idx in range(idx, N):      # 바꿀 위치를 반복
-            col[idx], col[swap_idx] = col[swap_idx], col[idx]
-            permutation(idx + 1, result + arr[idx][col[idx]])    # 다음 자리 확인
-            col[idx], col[swap_idx] = col[swap_idx], col[idx]
-            # 원상 복구 (처음 모양에서 자리를 바꾸는게 아니라 바뀌어진 모양에서
-            # 또 자리를 바꾸기 떄문에 예측하기 어려워 지고 잘못된 동작을 수행하게 된다.)
-
-T = int(input())
-for tc in range(1, T+1):
-    N = int(input())
-    arr = [list(map(int, input().split())) for _ in range(N)]
-    col = [i for i in range(N)]
-    min_v = 1000000
-    permutation(0, 0)
-
-    print(f'#{tc} {min_v}')
+# import sys
+# sys.stdin = open('input_4881.txt', 'r')
+#
+# def permutation(idx, result):
+#     global min_v
+#
+#     if idx == N:
+#         if result < min_v:
+#             min_v = result
+#         return
+#     elif min_v <= result:
+#         return
+#
+#     else:
+#         for swap_idx in range(idx, N):      # 바꿀 위치를 반복
+#             col[idx], col[swap_idx] = col[swap_idx], col[idx]
+#             permutation(idx + 1, result + arr[idx][col[idx]])    # 다음 자리 확인
+#             col[idx], col[swap_idx] = col[swap_idx], col[idx]
+#             # 원상 복구 (처음 모양에서 자리를 바꾸는게 아니라 바뀌어진 모양에서
+#             # 또 자리를 바꾸기 떄문에 예측하기 어려워 지고 잘못된 동작을 수행하게 된다.)
+#
+# T = int(input())
+# for tc in range(1, T+1):
+#     N = int(input())
+#     arr = [list(map(int, input().split())) for _ in range(N)]
+#     col = [i for i in range(N)]
+#     min_v = 1000000
+#     permutation(0, 0)
+#
+#     print(f'#{tc} {min_v}')
 
 # 18404. 부분집합
 
@@ -182,3 +182,7 @@ for tc in range(1, T+1):
 # powerset(0)
 #
 # print(f'#{1} {result}')
+
+
+for i in range(13, 1, -1):
+    print(i)

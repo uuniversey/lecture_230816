@@ -1,21 +1,70 @@
 
 
-# # 2304. 창고 다각형
-#
-# # 가장 높은 기둥부터 선의 높이가 계속 낮아져야 함
-# # 양 끝 기둥이 창고의 옆면이 되어야 함
-# # 창고 면적이 가장 작아지도록
-#
-# import sys
-# sys.stdin = open('SStice.txt', 'r')
-#
-# T = 1
-# N = int(input())
-# arr = [list(map(int, input().split())) for _ in range(N)]
-# for i in range(N):
-#     my_dic = {arr[i][0]: arr[i][1]}
-# for tc in range(1, T+1):
-#     print(my_dic)
+# 2304. 창고 다각형
+
+# 가장 높은 기둥 (인덱스 1번 중 최대값 찾기) 부터 선의 높이가 계속 낮아져야 함
+# 양 끝 기둥이 창고의 옆면이 되어야 함 인덱스 0번의 값 최저 최고 찾아야함
+# 창고 면적이 가장 작아지도록
+
+import sys
+sys.stdin = open('SStice.txt', 'r')
+
+T = 1
+N = int(input())
+arr = [list(map(int, input().split())) for _ in range(N)]
+my_dic = {}
+for tc in range(1, T+1):
+    for i in range(N):
+        my_key = arr[i][0]              # 키 값 : 위치
+        my_dic[my_key] = arr[i][1]      # 밸류 값 : 높이
+
+    max_high = 0
+    for j in list(my_dic.values()):
+        if max_high < int(j):
+            max_high = int(j)
+
+    left = 1000
+    right = 0
+    for k in list(my_dic.keys()):
+        if right < int(k):
+            right = int(k)
+        if left > int(k):
+            left = int(k)
+
+    area = max_high * (right+1 - left)
+
+    sort_dict = sorted(my_dic.items())
+
+    sum_v = 0
+    max_v = 0
+    idx = 0
+    for l in range(len(sort_dict)):
+        idx = l
+        if sort_dict[l][1] == max_high:
+            while True:                                         # 최대값 max_high의 왼쪽 처리..
+                for m in range(1, idx):
+                    if max_v < sort_dict[m][1]:
+                        max_v = sort_dict[m][1]
+                        sum_v += (sort_dict[l][0] - sort_dict[m][0]) * (max_high - max_v)
+                        l = m
+
+                if sort_dict[l][1] == max_high:
+                    break
+
+            max_v = 0
+            while True:                                         # 최대값 max_high의 오른쪽 처리..
+                for n in range(len(sort_dict)-1, idx-1, -1):
+                    if max_v < sort_dict[n][1]:
+                        max_v = sort_dict[n][1]
+                        sum_v += (sort_dict[n][0] - sort_dict[l][0]) * (max_high - max_v)
+                        l = n
+
+                if sort_dict[l][1] == max_high:
+                    break
+
+    result = area - sum_v
+
+    print(result)
 
 
 # # 재귀 호출?
