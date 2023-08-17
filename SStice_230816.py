@@ -2,70 +2,41 @@
 
 # 2304. 창고 다각형
 
-# 가장 높은 기둥 (인덱스 1번 중 최대값 찾기) 부터 선의 높이가 계속 낮아져야 함
-# 양 끝 기둥이 창고의 옆면이 되어야 함 인덱스 0번의 값 최저 최고 찾아야함
-# 창고 면적이 가장 작아지도록
-
 import sys
 sys.stdin = open('SStice.txt', 'r')
 
-T = 1
+arr = [0] * 1001    # 인덱스를 따기 위한 배열
+max_high = 0
+left = 10000
+right = 0
+area = 0
+idx = 0
 N = int(input())
-arr = [list(map(int, input().split())) for _ in range(N)]
-my_dic = {}
-for tc in range(1, T+1):
-    for i in range(N):
-        my_key = arr[i][0]              # 키 값 : 위치
-        my_dic[my_key] = arr[i][1]      # 밸류 값 : 높이
+for i in range(N):
+    position, high = map(int, input().split())
+    arr[position] = high    # arr에 인덱스를 맞춰서 높이를 인덱스의 밸류값으로 넣는다.
 
-    max_high = 0
-    for j in list(my_dic.values()):
-        if max_high < int(j):
-            max_high = int(j)
+    if max_high < high:     # 제일 높은 곳 찾기
+        max_high = high
+        idx = position      # 제일 높은 곳의 인덱스 따놓기
+    if left > position:     # 제일 왼쪽 찾기
+        left = position
+    if right < position:    # 제일 오른쪽 찾기
+        right = position
 
-    left = 1000
-    right = 0
-    for k in list(my_dic.keys()):
-        if right < int(k):
-            right = int(k)
-        if left > int(k):
-            left = int(k)
+stick_L = 0     # 제일 높은 곳 왼쪽의 기둥
+stick_R = 0     # 제일 높은 곳 오른쪽의 기둥
+for j in range(left, idx):          # 왼쪽인 경우
+    if stick_L < arr[j]:            # 높은곳을 만나기 전까지
+        stick_L = arr[j]
+    area += stick_L                 # 계속 기둥값을 더해준다.
 
-    area = max_high * (right+1 - left)
+for k in range(right, idx-1, -1):   # 오른쪽인 경우 거꾸로 돈다 왼쪽과 같은 법칙을 사용하기 위해서
+    if stick_R < arr[k]:            # 높은곳을 만나기 전까지
+        stick_R = arr[k]
+    area += stick_R                 # 계속 기둥값을 더해준다.
 
-    sort_dict = sorted(my_dic.items())
-
-    sum_v = 0
-    max_v = 0
-    idx = 0
-    for l in range(len(sort_dict)):
-        idx = l
-        if sort_dict[l][1] == max_high:
-            while True:                                         # 최대값 max_high의 왼쪽 처리..
-                for m in range(1, idx):
-                    if max_v < sort_dict[m][1]:
-                        max_v = sort_dict[m][1]
-                        sum_v += (sort_dict[l][0] - sort_dict[m][0]) * (max_high - max_v)
-                        l = m
-
-                if sort_dict[l][1] == max_high:
-                    break
-
-            max_v = 0
-            while True:                                         # 최대값 max_high의 오른쪽 처리..
-                for n in range(len(sort_dict)-1, idx-1, -1):
-                    if max_v < sort_dict[n][1]:
-                        max_v = sort_dict[n][1]
-                        sum_v += (sort_dict[n][0] - sort_dict[l][0]) * (max_high - max_v)
-                        l = n
-
-                if sort_dict[l][1] == max_high:
-                    break
-
-    result = area - sum_v
-
-    print(result)
-
+print(area)
 
 # # 재귀 호출?
 #
@@ -314,3 +285,5 @@ for tc in range(1, T+1):
 #     permutation(0)
 #
 #     print(f'#{tc} {min_v}')
+
+
